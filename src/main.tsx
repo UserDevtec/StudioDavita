@@ -13,12 +13,14 @@ type WorkItem = {
   detail?: string;
 };
 
+const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
+
 const graphicWork: WorkItem[] = [
   {
     title: "Graphic design",
     type: "Print & campaign",
     slug: "graphic-design",
-    image: "/work/work-05.png",
+    image: asset("work/work-05.png"),
     note: "Brochures, magazines, campaign visuals and branded materials.",
     detail: "A focused collection of printed campaigns, magazines, layout systems and branded visuals built around strong hierarchy and an editorial rhythm.",
   },
@@ -26,7 +28,7 @@ const graphicWork: WorkItem[] = [
     title: "Photography",
     type: "Image direction",
     slug: "photography",
-    image: "/work/work-11.jpg",
+    image: asset("work/work-11.jpg"),
     note: "Portraits and visual stories with a clear editorial tone.",
     detail: "Photography work shaped for campaign context: clear portraits, atmosphere, composition and image direction that support a wider visual story.",
   },
@@ -34,7 +36,7 @@ const graphicWork: WorkItem[] = [
     title: "Social content",
     type: "Digital assets",
     slug: "social-content",
-    image: "/work/work-22.png",
+    image: asset("work/work-22.png"),
     note: "Social media visuals, mobile-first formats and campaign sets.",
     detail: "Mobile-first visuals and social campaign pieces designed for fast recognition, flexible formats and a consistent brand feeling across channels.",
   },
@@ -46,7 +48,7 @@ const featuredProjects: WorkItem[] = [
     title: "Editorial layout",
     type: "Publication design",
     slug: "editorial-layout",
-    image: "/work/work-01.png",
+    image: asset("work/work-01.png"),
     note: "Magazine-inspired layouts with a clean, confident structure.",
     detail: "Editorial pages and printed assets with strong spacing, image scale and typographic contrast.",
   },
@@ -54,7 +56,7 @@ const featuredProjects: WorkItem[] = [
     title: "Campaign visuals",
     type: "Brand campaign",
     slug: "campaign-visuals",
-    image: "/work/work-12.png",
+    image: asset("work/work-12.png"),
     note: "Campaign materials that combine typography, image and energy.",
     detail: "A visual campaign direction that translates one idea into flexible assets for print, web and social.",
   },
@@ -62,7 +64,7 @@ const featuredProjects: WorkItem[] = [
     title: "Poster series",
     type: "Graphic system",
     slug: "poster-series",
-    image: "/work/work-06.png",
+    image: asset("work/work-06.png"),
     note: "A bold poster-led direction with expressive composition.",
     detail: "A graphic system built around impactful type, confident cropping and repeatable campaign rules.",
   },
@@ -70,7 +72,7 @@ const featuredProjects: WorkItem[] = [
     title: "Music artwork",
     type: "Visual identity",
     slug: "music-artwork",
-    image: "/work/work-19.png",
+    image: asset("work/work-19.png"),
     note: "Artwork, covers and visual assets with a cinematic feel.",
     detail: "Artwork and supporting visual assets with a polished atmosphere and a clear brand world.",
   },
@@ -78,34 +80,34 @@ const featuredProjects: WorkItem[] = [
     title: "Brand moments",
     type: "Social & print",
     slug: "brand-moments",
-    image: "/work/work-20.png",
+    image: asset("work/work-20.png"),
     note: "Small but memorable brand assets across formats.",
     detail: "Compact brand moments and supporting visuals designed to make a campaign feel coherent at every touchpoint.",
   },
 ];
 
 const gallery = [
-  "/work/work-01.png",
-  "/work/work-02.png",
-  "/work/work-03.png",
-  "/work/work-05.png",
-  "/work/work-06.png",
-  "/work/work-10.jpg",
-  "/work/work-12.png",
-  "/work/work-13.png",
-  "/work/work-16.png",
-  "/work/work-19.png",
-  "/work/work-20.png",
-  "/work/work-22.png",
+  asset("work/work-01.png"),
+  asset("work/work-02.png"),
+  asset("work/work-03.png"),
+  asset("work/work-05.png"),
+  asset("work/work-06.png"),
+  asset("work/work-10.jpg"),
+  asset("work/work-12.png"),
+  asset("work/work-13.png"),
+  asset("work/work-16.png"),
+  asset("work/work-19.png"),
+  asset("work/work-20.png"),
+  asset("work/work-22.png"),
 ];
 
 const videos = [
-  ["Stamceldonoren bedankt!", "01:11", "Een korte film over hoop, donoren en het verschil maken.", "/videos/video-01.mp4", "/video-posters/video-01.jpg"],
-  ["Een bijzondere verjaardag voor Brian", "03:24", "Een persoonlijk verhaal rond een stamceldonor en een nieuwe toekomst.", "/videos/video-02.mp4", "/video-posters/video-02.jpg"],
-  ["Jungheinrich, het eldorado voor servicemonteurs.", "01:57", "Employer branding met tempo, waardering en helder verhaal.", "/videos/video-03.mp4", "/video-posters/video-03.jpg"],
-  ["HVDZ Trakteer jezelf op Leiden", "00:31", "Campagne voor de binnenstad promotie van Leiden.", "/videos/video-04.mp4", "/video-posters/video-04.jpg"],
-  ["One Young World 2018 | Unilever", "04:06", "Event storytelling rond jonge leiders en positieve impact.", "/videos/video-05.mp4", "/video-posters/video-05.jpg"],
-  ["Dit zijn wij | Geert", "01:00", "Een compact karakterverhaal voor Dirk Kuyt Foundation.", "/videos/video-06.mp4", "/video-posters/video-06.jpg"],
+  ["Stamceldonoren bedankt!", "01:11", "Een korte film over hoop, donoren en het verschil maken.", asset("videos/video-01.mp4"), asset("video-posters/video-01.jpg")],
+  ["Een bijzondere verjaardag voor Brian", "03:24", "Een persoonlijk verhaal rond een stamceldonor en een nieuwe toekomst.", asset("videos/video-02.mp4"), asset("video-posters/video-02.jpg")],
+  ["Jungheinrich, het eldorado voor servicemonteurs.", "01:57", "Employer branding met tempo, waardering en helder verhaal.", asset("videos/video-03.mp4"), asset("video-posters/video-03.jpg")],
+  ["HVDZ Trakteer jezelf op Leiden", "00:31", "Campagne voor de binnenstad promotie van Leiden.", asset("videos/video-04.mp4"), asset("video-posters/video-04.jpg")],
+  ["One Young World 2018 | Unilever", "04:06", "Event storytelling rond jonge leiders en positieve impact.", asset("videos/video-05.mp4"), asset("video-posters/video-05.jpg")],
+  ["Dit zijn wij | Geert", "01:00", "Een compact karakterverhaal voor Dirk Kuyt Foundation.", asset("videos/video-06.mp4"), asset("video-posters/video-06.jpg")],
 ];
 
 const slugify = (value: string) =>
@@ -122,7 +124,7 @@ const rainProjects = [
     title: "Portfolio detail",
     type: "Campaign detail",
     slug: "portfolio-detail",
-    image: "/work/work-02.png",
+    image: asset("work/work-02.png"),
     note: "Detailed visual work from the archive.",
     detail: "A close-up portfolio piece with campaign styling and visual polish.",
   },
@@ -130,7 +132,7 @@ const rainProjects = [
     title: "Printed story",
     type: "Print design",
     slug: "printed-story",
-    image: "/work/work-03.png",
+    image: asset("work/work-03.png"),
     note: "Printed campaign material with a clear rhythm.",
     detail: "Print-led design work with structured layouts and expressive imagery.",
   },
@@ -138,7 +140,7 @@ const rainProjects = [
     title: "Visual set",
     type: "Mixed media",
     slug: "visual-set",
-    image: "/work/work-13.png",
+    image: asset("work/work-13.png"),
     note: "A mixed set of designed moments.",
     detail: "A compact visual set for campaign storytelling across multiple formats.",
   },
@@ -214,7 +216,7 @@ function Layout() {
       <ScrollToTop />
       <header className="site-header">
         <Link className="brand" to="/" aria-label="Luminous Graphics home">
-          <img src="/logo-lg-line.svg" alt="Luminous Graphics" />
+          <img src={asset("logo-lg-line.svg")} alt="Luminous Graphics" />
         </Link>
         <button
           className={`menu-toggle${menuOpen ? " is-open" : ""}`}
@@ -891,9 +893,9 @@ function Contact() {
 
 function LogoOptions() {
   const options = [
-    ["Option 1", "Minimal studio mark", "/logo-option-1.svg"],
-    ["Option 2", "Editorial wordmark", "/logo-option-2.svg"],
-    ["Option 3", "Color-window monogram", "/logo-option-3.svg"],
+    ["Option 1", "Minimal studio mark", asset("logo-option-1.svg")],
+    ["Option 2", "Editorial wordmark", asset("logo-option-2.svg")],
+    ["Option 3", "Color-window monogram", asset("logo-option-3.svg")],
   ];
 
   return (
