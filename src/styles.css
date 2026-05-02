@@ -21,6 +21,16 @@
   box-sizing: border-box;
 }
 
+::selection {
+  background: transparent;
+  color: var(--yellow);
+}
+
+::-moz-selection {
+  background: transparent;
+  color: var(--yellow);
+}
+
 html {
   scroll-behavior: smooth;
 }
