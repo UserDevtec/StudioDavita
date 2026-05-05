@@ -9,6 +9,7 @@ type WorkItem = {
   type: string;
   image: string;
   note: string;
+  gallery?: string[];
   slug?: string;
   detail?: string;
 };
@@ -22,6 +23,13 @@ const graphicWork: WorkItem[] = [
     slug: "graphic-design",
     image: asset("work/work-05.png"),
     note: "Brochures, magazines, campagnebeelden en merkgerichte materialen.",
+    gallery: [
+      asset("portfolio-gallery/cafetpleintje/cafetpleintje-window.png"),
+      asset("portfolio-gallery/haagse-schatten/website.png"),
+      asset("portfolio-gallery/haagse-schatten/schatkaart.png"),
+      asset("portfolio-gallery/haco/screenshot-01.png"),
+      asset("portfolio-gallery/haco/screenshot-02.png"),
+    ],
     detail: "Een gerichte selectie printcampagnes, magazines, layouts en merkbeelden met sterke hiërarchie en een redactioneel ritme.",
   },
   {
@@ -38,6 +46,13 @@ const graphicWork: WorkItem[] = [
     slug: "social-content",
     image: asset("work/work-22.png"),
     note: "Social beelden, mobile-first formats en campagnesets.",
+    gallery: [
+      asset("portfolio-gallery/postnl/mobile-01.png"),
+      asset("portfolio-gallery/postnl/mobile-02.png"),
+      asset("portfolio-gallery/postnl/mobile-03.png"),
+      asset("portfolio-gallery/allianz/veilig-thuis-insta.png"),
+      asset("portfolio-gallery/allianz/verbouwen-insta.png"),
+    ],
     detail: "Mobile-first beelden en social campagne-items die ontworpen zijn voor snelle herkenning, flexibele formats en een consistente merkbeleving.",
   },
 ];
@@ -58,6 +73,14 @@ const featuredProjects: WorkItem[] = [
     slug: "campaign-visuals",
     image: asset("work/work-12.png"),
     note: "Campagne materiaal waarin typografie, beeld en energie samenkomen.",
+    gallery: [
+      asset("portfolio-gallery/allianz/veilig-thuis.png"),
+      asset("portfolio-gallery/allianz/veilig-thuis-insta.png"),
+      asset("portfolio-gallery/allianz/verbouwen.png"),
+      asset("portfolio-gallery/allianz/verbouwen-insta.png"),
+      asset("portfolio-gallery/allianz/woonsituatie.jpg"),
+      asset("portfolio-gallery/allianz/woonsituatie-fullscreen.jpg"),
+    ],
     detail: "Een visuele campagnerichting die een idee vertaalt naar flexibele middelen voor print, web en social.",
   },
   {
@@ -66,6 +89,11 @@ const featuredProjects: WorkItem[] = [
     slug: "poster-series",
     image: asset("work/work-06.png"),
     note: "Een uitgesproken posterrichting met expressieve compositie.",
+    gallery: [
+      asset("portfolio-gallery/cafetpleintje/cafetpleintje-window.png"),
+      asset("portfolio-gallery/haagse-schatten/website.png"),
+      asset("portfolio-gallery/haagse-schatten/schatkaart.png"),
+    ],
     detail: "Een grafisch systeem rond krachtige typografie, bewuste uitsnedes en herhaalbare campagneregels.",
   },
   {
@@ -74,6 +102,14 @@ const featuredProjects: WorkItem[] = [
     slug: "music-artwork",
     image: asset("work/work-19.png"),
     note: "Covers en visuele middelen met een filmische sfeer.",
+    gallery: [
+      asset("portfolio-gallery/haevn/dvd.jpg"),
+      asset("portfolio-gallery/haevn/holyground-digipack-2.jpg"),
+      asset("portfolio-gallery/haevn/holyground-digipack-3.jpg"),
+      asset("portfolio-gallery/haevn/holyground-digipack-4.jpg"),
+      asset("portfolio-gallery/haevn/holyground-vinyl.jpg"),
+      asset("portfolio-gallery/haevn/holyground-vinyl-inside.jpg"),
+    ],
     detail: "Beeldwerk en ondersteunende visuele middelen met een verzorgde sfeer en een duidelijke merkwereld.",
   },
   {
@@ -82,6 +118,12 @@ const featuredProjects: WorkItem[] = [
     slug: "brand-moments",
     image: asset("work/work-20.png"),
     note: "Kleine maar herkenbare merkuitingen in verschillende formats.",
+    gallery: [
+      asset("portfolio-gallery/haco/screenshot-03.png"),
+      asset("portfolio-gallery/haco/screenshot-04.png"),
+      asset("portfolio-gallery/haco/screenshot-05.png"),
+      asset("portfolio-gallery/haco/screenshot-06.png"),
+    ],
     detail: "Compacte merkuitingen en ondersteunende visuals die een campagne op ieder contactmoment samenhang geven.",
   },
 ];
@@ -126,6 +168,11 @@ const rainProjects = [
     slug: "portfolio-detail",
     image: asset("work/work-02.png"),
     note: "Gedetailleerd visueel werk uit het archief.",
+    gallery: [
+      asset("portfolio-gallery/allianz/woonsituatie-fullscreen.jpg"),
+      asset("portfolio-gallery/haagse-schatten/website.png"),
+      asset("portfolio-gallery/haco/screenshot-02.png"),
+    ],
     detail: "Een uitgelicht portfolio-item met campagnestijl en visuele afwerking.",
   },
   {
@@ -134,6 +181,11 @@ const rainProjects = [
     slug: "printed-story",
     image: asset("work/work-03.png"),
     note: "Gedrukt campagne materiaal met een helder ritme.",
+    gallery: [
+      asset("portfolio-gallery/cafetpleintje/cafetpleintje-window.png"),
+      asset("portfolio-gallery/haagse-schatten/schatkaart.png"),
+      asset("portfolio-gallery/haevn/holyground-digipack-2.jpg"),
+    ],
     detail: "Printgericht ontwerp met gestructureerde layouts en expressief beeldgebruik.",
   },
   {
@@ -142,6 +194,12 @@ const rainProjects = [
     slug: "visual-set",
     image: asset("work/work-13.png"),
     note: "Een gemengde set ontworpen momenten.",
+    gallery: [
+      asset("portfolio-gallery/postnl/mobile-01.png"),
+      asset("portfolio-gallery/allianz/verbouwen.png"),
+      asset("portfolio-gallery/haco/screenshot-05.png"),
+      asset("portfolio-gallery/haevn/holyground-vinyl.jpg"),
+    ],
     detail: "Een compacte visuele set voor campagneverhalen in meerdere formats.",
   },
 ];
@@ -620,13 +678,18 @@ function Video() {
 function PortfolioDetail() {
   const { slug } = useParams();
   const project = portfolioProjects.find((item) => item.slug === slug);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   useReveal();
 
   useEffect(() => {
-    if (!lightboxOpen) return;
+    setPreviewImage(null);
+  }, [slug]);
+
+  useEffect(() => {
+    if (!lightboxImage) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setLightboxOpen(false);
+      if (event.key === "Escape") setLightboxImage(null);
     };
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
@@ -634,7 +697,7 @@ function PortfolioDetail() {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [lightboxOpen]);
+  }, [lightboxImage]);
 
   if (!project) {
     return (
@@ -645,6 +708,8 @@ function PortfolioDetail() {
   }
 
   const related = portfolioProjects.filter((item) => item.slug !== project.slug).slice(0, 2);
+  const galleryImages = [project.image, ...(project.gallery ?? [])];
+  const activePreview = previewImage ?? project.image;
 
   return (
     <main>
@@ -655,10 +720,31 @@ function PortfolioDetail() {
           <p className="intro">{project.detail}</p>
           <Link className="button secondary" to="/portfolio">Terug naar portfolio</Link>
         </div>
-        <button className="detail-media image-zoom-trigger" type="button" onClick={() => setLightboxOpen(true)}>
-          <img src={project.image} alt={`${project.title} projectdetail`} />
-          <span>Groter bekijken</span>
-        </button>
+        <div className="detail-visual-stack">
+          <button className="detail-media image-zoom-trigger" type="button" onClick={() => setLightboxImage(activePreview)}>
+            <img src={activePreview} alt={`${project.title} projectdetail`} />
+            <span>Groter bekijken</span>
+          </button>
+          {galleryImages.length > 1 && (
+            <div className="detail-gallery" aria-label={`Extra beelden voor ${project.title}`}>
+              <div className="detail-gallery-grid">
+                {galleryImages.map((image, index) => (
+                  <button
+                    className={`gallery-tile gallery-tile-${(index % 9) + 1}${activePreview === image ? " is-active" : ""}`}
+                    type="button"
+                    key={image}
+                    onClick={() => setLightboxImage(image)}
+                    onFocus={() => setPreviewImage(image)}
+                    onMouseEnter={() => setPreviewImage(image)}
+                    aria-label={`Open beeld ${index + 1} van ${project.title}`}
+                  >
+                    <img src={image} alt={`${project.title} galeriebeeld ${index + 1}`} loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </section>
       <section className="detail-body page-pad">
         <article className="detail-panel reveal">
@@ -676,12 +762,12 @@ function PortfolioDetail() {
           ))}
         </div>
       </section>
-      {lightboxOpen && (
-        <div className="image-lightbox" role="dialog" aria-modal="true" aria-label={`${project.title} grotere preview`} onClick={() => setLightboxOpen(false)}>
-          <button className="lightbox-close" type="button" aria-label="Preview sluiten" onClick={() => setLightboxOpen(false)}>
+      {lightboxImage && (
+        <div className="image-lightbox" role="dialog" aria-modal="true" aria-label={`${project.title} grotere preview`} onClick={() => setLightboxImage(null)}>
+          <button className="lightbox-close" type="button" aria-label="Preview sluiten" onClick={() => setLightboxImage(null)}>
             <X size={20} />
           </button>
-          <img src={project.image} alt={`${project.title} vergroot`} onClick={(event) => event.stopPropagation()} />
+          <img src={lightboxImage} alt={`${project.title} vergroot`} onClick={(event) => event.stopPropagation()} />
         </div>
       )}
     </main>
