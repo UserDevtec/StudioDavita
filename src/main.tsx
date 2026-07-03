@@ -205,6 +205,47 @@ const rainProjects = [
 ];
 
 const portfolioProjects = rainProjects;
+const standoutProjects = [
+  {
+    project: portfolioProjects.find((item) => item.slug === "graphic-design")!,
+    eyebrow: "Uitgelicht project",
+    images: [
+      asset("work/work-16.png"),
+      asset("work/work-19.png"),
+      asset("portfolio-gallery/haagse-schatten/website.png"),
+      asset("portfolio-gallery/haagse-schatten/schatkaart.png"),
+    ],
+    goal: "Een printproject maken dat overzichtelijk voelt, maar tegelijk genoeg energie en ontdekking in zich heeft.",
+    impact: "De campagne krijgt meer karakter door duidelijke routes, herkenbare details en een consistente beeldtaal.",
+    assignment: "Een visuele set met kaartmateriaal, campagnebeelden en printitems voor een herkenbare ervaring.",
+  },
+  {
+    project: portfolioProjects.find((item) => item.slug === "music-artwork")!,
+    eyebrow: "Beeldwereld",
+    images: [
+      asset("work/work-06.png"),
+      asset("portfolio-gallery/haevn/holyground-vinyl.jpg"),
+      asset("portfolio-gallery/haevn/holyground-digipack-2.jpg"),
+      asset("portfolio-gallery/haevn/holyground-vinyl-inside.jpg"),
+    ],
+    goal: "Een visuele sfeer neerzetten die past bij muziek, emotie en een zorgvuldig opgebouwd verhaal.",
+    impact: "Een herkenbare stijl over meerdere dragers: cover, vinyl, digipack en ondersteunende beelden.",
+    assignment: "Artwork en visuele middelen vertalen naar een complete, consistente presentatie.",
+  },
+  {
+    project: portfolioProjects.find((item) => item.slug === "campaign-visuals")!,
+    eyebrow: "Print & campagne",
+    images: [
+      asset("work/work-12.png"),
+      asset("portfolio-gallery/allianz/verbouwen.png"),
+      asset("portfolio-gallery/allianz/veilig-thuis.png"),
+      asset("portfolio-gallery/allianz/woonsituatie-fullscreen.jpg"),
+    ],
+    goal: "Complexe informatie helder vormgeven zonder dat het materiaal zijn energie verliest.",
+    impact: "Printmateriaal dat beter scanbaar wordt en tegelijk een uitgesproken visuele identiteit houdt.",
+    assignment: "Brochures, campagnebeelden en redactionele layouts samenbrengen in een sterke lijn.",
+  },
+];
 
 const projectRain = rainProjects.map((project, index) => {
   const patterns = [
@@ -273,8 +314,8 @@ function Layout() {
     <>
       <ScrollToTop />
       <header className="site-header">
-        <Link className="brand" to="/" aria-label="Luminous Graphics startpagina">
-          <img src={asset("logo-lg-line.svg")} alt="Luminous Graphics" />
+        <Link className="brand" to="/" aria-label="StudioDavita startpagina">
+          <img src={asset("logo-lg-line.svg")} alt="StudioDavita" />
         </Link>
         <button
           className={`menu-toggle${menuOpen ? " is-open" : ""}`}
@@ -316,27 +357,27 @@ function Layout() {
 function getPageTitle(pathname: string) {
   const cleanPath = pathname.replace(/\/$/, "") || "/";
 
-  if (cleanPath === "/") return "Start | Luminous Graphics";
-  if (cleanPath === "/portfolio" || cleanPath === "/work") return "Portfolio | Luminous Graphics";
-  if (cleanPath === "/video") return "Video | Luminous Graphics";
-  if (cleanPath === "/experience") return "Ervaring | Luminous Graphics";
-  if (cleanPath === "/skills") return "Vaardigheden | Luminous Graphics";
-  if (cleanPath === "/contact") return "Contact | Luminous Graphics";
-  if (cleanPath === "/logo-options") return "Logo-opties | Luminous Graphics";
+  if (cleanPath === "/") return "Start | StudioDavita";
+  if (cleanPath === "/portfolio" || cleanPath === "/work") return "Portfolio | StudioDavita";
+  if (cleanPath === "/video") return "Video | StudioDavita";
+  if (cleanPath === "/experience") return "Ervaring | StudioDavita";
+  if (cleanPath === "/skills") return "Vaardigheden | StudioDavita";
+  if (cleanPath === "/contact") return "Contact | StudioDavita";
+  if (cleanPath === "/logo-options") return "Logo-opties | StudioDavita";
 
   const portfolioMatch = cleanPath.match(/^\/(?:portfolio|work)\/(.+)$/);
   if (portfolioMatch) {
     const project = portfolioProjects.find((item) => item.slug === portfolioMatch[1]);
-    return `${project?.title ?? "Project"} | Luminous Graphics`;
+    return `${project?.title ?? "Project"} | StudioDavita`;
   }
 
   const videoMatch = cleanPath.match(/^\/video\/(.+)$/);
   if (videoMatch) {
     const video = videos.find(([title]) => slugify(title) === videoMatch[1]);
-    return `${video?.[0] ?? "Video"} | Luminous Graphics`;
+    return `${video?.[0] ?? "Video"} | StudioDavita`;
   }
 
-  return "Luminous Graphics";
+  return "StudioDavita";
 }
 
 function ScrollToTop() {
@@ -485,6 +526,68 @@ function KineticChip() {
   );
 }
 
+function FeaturedPortfolioCarousel() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const active = standoutProjects[activeIndex];
+  const project = active.project;
+  const supportingImages = active.images;
+
+  const goTo = (direction: 1 | -1) => {
+    setActiveIndex((current) => (current + direction + standoutProjects.length) % standoutProjects.length);
+  };
+
+  return (
+    <div className="featured-carousel reveal">
+      <div className="featured-main">
+        <img src={project.image} alt={`${project.title} uitgelicht project`} />
+        <div>
+          <span>{active.eyebrow}</span>
+          <h3>{project.title}</h3>
+          <p>{project.note}</p>
+        </div>
+      </div>
+
+      <article className="featured-text featured-goal">
+        <span>Doel</span>
+        <p>{active.goal}</p>
+      </article>
+
+      <div className="featured-media featured-media-large">
+        <img src={supportingImages[1] ?? project.image} alt="" />
+      </div>
+
+      <article className="featured-text featured-impact">
+        <span>Impact</span>
+        <p>{active.impact}</p>
+      </article>
+
+      <article className="featured-text featured-assignment">
+        <span>Opdracht</span>
+        <p>{active.assignment}</p>
+      </article>
+
+      <div className="featured-media featured-top-right">
+        <img src={supportingImages[0] ?? project.image} alt="" />
+      </div>
+
+      <div className="featured-media featured-bottom-left-a">
+        <img src={supportingImages[2] ?? project.image} alt="" />
+      </div>
+
+      <div className="featured-media featured-bottom-left-b">
+        <img src={supportingImages[3] ?? project.image} alt="" />
+      </div>
+
+      <div className="featured-media featured-bottom-right">
+        <img src={supportingImages[3] ?? project.image} alt="" />
+      </div>
+
+      <button className="featured-hotspot featured-prev" type="button" onClick={() => goTo(-1)} aria-label="Vorig uitgelicht project" />
+      <button className="featured-hotspot featured-next" type="button" onClick={() => goTo(1)} aria-label="Volgend uitgelicht project" />
+    </div>
+  );
+}
+
 function Home() {
   useReveal();
   return (
@@ -494,7 +597,7 @@ function Home() {
           <TypewriterEyebrow text="Mijn naam is Davita." />
           <h1>Video-editor & grafisch ontwerper.</h1>
           <p className="intro">
-            Luminous Graphics is het portfolio van Davita: creatief ontwerp, videomontage, bewegend ontwerp
+            StudioDavita is het portfolio van Davita: creatief ontwerp, videomontage, bewegend ontwerp
             en visuele verhalen voor merken, campagnes en sociale content.
           </p>
           <div className="hero-actions">
@@ -508,29 +611,8 @@ function Home() {
           </div>
         </div>
 
-        <div className="kinetic-board reveal" aria-label="Portfoliocollage">
-          <div className="project-rain" aria-label="Uitgelichte projecten">
-            {projectRain.map((project) => (
-              <Link
-                to={`/portfolio/${project.slug}`}
-                style={{
-                  "--x": project.x,
-                  "--s": project.scale,
-                  "--d": project.duration,
-                  "--delay": project.delay,
-                  "--r1": project.rotateStart,
-                  "--r2": project.rotateEnd,
-                } as React.CSSProperties}
-                key={project.slug}
-                aria-label={`Open project ${project.title}`}
-              >
-                <span className="rain-card">
-                  <img src={project.image} alt="" />
-                  <span className="rain-cta">Bekijk project</span>
-                </span>
-              </Link>
-            ))}
-          </div>
+        <div className="kinetic-board reveal" aria-label="Portret van Davita">
+          <img className="hero-portrait" src={asset("studio/davita-portrait.jpg")} alt="Portret van Davita" />
           <KineticChip />
         </div>
       </section>
@@ -548,16 +630,9 @@ function Home() {
       <section className="home-random page-pad">
         <div className="section-heading reveal">
           <TypewriterEyebrow text="Portfolio" />
-          <h2>Geen strak raster, maar een levende wand vol beelden, campagnes en verhalen.</h2>
+          <h2>Drie projecten die uitblinken in beeld, ritme en verhaal.</h2>
         </div>
-        <div className="random-wall">
-          {rotatingProjects.map((project, index) => (
-            <Link className={`random-tile tile-${index + 1} reveal`} to={`/portfolio/${project.slug}`} key={project.slug}>
-              <img src={project.image} alt="" />
-              <span>{project.title}</span>
-            </Link>
-          ))}
-        </div>
+        <FeaturedPortfolioCarousel />
       </section>
 
       <section className="portfolio-modes page-pad">
@@ -598,7 +673,7 @@ function Portfolio() {
   useReveal();
   return (
     <main>
-      <PageIntro eyebrow="Portfolio" title="Mijn nieuwste werk." text="Een bewust gemengde collectie grafisch ontwerp, fotografie, merk ontwikkeling, print en sociale content uit het huidige Luminous Graphics portfolio." />
+      <PageIntro eyebrow="Portfolio" title="Mijn nieuwste werk." text="Een bewust gemengde collectie grafisch ontwerp, fotografie, merk ontwikkeling, print en sociale content uit het huidige StudioDavita portfolio." />
       <section className="case-section page-pad">
         <div className="case-grid">
           {graphicWork.map((item, index) => (
@@ -632,7 +707,7 @@ function Video() {
   useReveal();
   return (
     <main>
-      <PageIntro eyebrow="Videografie" title="Verhalen met tempo, helderheid en gevoel." text="Geselecteerd videomontage- en vertelwerk uit het bestaande Luminous Graphics portfolio." />
+      <PageIntro eyebrow="Videografie" title="Verhalen met tempo, helderheid en gevoel." text="Geselecteerd videomontage- en vertelwerk uit het bestaande StudioDavita portfolio." />
       <section className="video-section page-pad">
         <div className="video-grid">
           {videos.map(([title, duration, note, src, poster], index) => (
@@ -702,7 +777,7 @@ function PortfolioDetail() {
   if (!project) {
     return (
       <main>
-        <PageIntro eyebrow="Project" title="Project niet gevonden." text="Dit project is niet beschikbaar binnen de huidige selectie van Luminous Graphics." />
+        <PageIntro eyebrow="Project" title="Project niet gevonden." text="Dit project is niet beschikbaar binnen de huidige selectie van StudioDavita." />
       </main>
     );
   }
@@ -804,7 +879,7 @@ function VideoDetail() {
   if (!video) {
     return (
       <main>
-        <PageIntro eyebrow="Video" title="Video niet gevonden." text="Deze video is niet beschikbaar binnen de huidige selectie van Luminous Graphics." />
+        <PageIntro eyebrow="Video" title="Video niet gevonden." text="Deze video is niet beschikbaar binnen de huidige selectie van StudioDavita." />
       </main>
     );
   }
@@ -989,13 +1064,13 @@ function LogoOptions() {
       <PageIntro
         eyebrow="Logorichtingen"
         title="Drie professionele logo-opties."
-        text="Drie mogelijke richtingen voor Luminous Graphics: ingetogen studio, redactioneel en een warmer monogram met kleur."
+        text="Drie mogelijke richtingen voor StudioDavita: ingetogen studio, redactioneel en een warmer monogram met kleur."
       />
       <section className="logo-options page-pad">
         {options.map(([title, label, src]) => (
           <article className="logo-card reveal" key={title}>
             <div className="logo-preview">
-              <img src={src} alt={`${title} voor Luminous Graphics`} />
+              <img src={src} alt={`${title} voor StudioDavita`} />
             </div>
             <p>{title}</p>
             <h3>{label}</h3>
@@ -1020,7 +1095,7 @@ function PageIntro({ eyebrow, title, text }: { eyebrow: string; title: string; t
 function Footer() {
   return (
     <footer>
-      <span>© 2026 Luminous Graphics</span>
+      <span>© 2026 StudioDavita</span>
       <a href="https://devtec.nl" target="_blank" rel="noreferrer">
         Gemaakt door Devtec
       </a>
@@ -1035,3 +1110,4 @@ createRoot(document.getElementById("root")!).render(
     </BrowserRouter>
   </React.StrictMode>,
 );
+
