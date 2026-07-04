@@ -595,11 +595,6 @@ function FeaturedPortfolioCarousel() {
     <div className="featured-carousel reveal">
       <div className="featured-main">
         <img src={project.image} alt={`${project.title} uitgelicht project`} />
-        <div>
-          <span>{active.eyebrow}</span>
-          <h3>{project.title}</h3>
-          <p>{project.note}</p>
-        </div>
       </div>
 
       <article className="featured-text featured-goal">

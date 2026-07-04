@@ -210,7 +210,6 @@ h3 {
 .case-art strong,
 .mini-project strong,
 .skill-card strong,
-.featured-main span,
 .featured-text span,
 .mode-card h3,
 .portfolio-filter-button strong,
@@ -820,13 +819,6 @@ h3 {
   position: relative;
 }
 
-.featured-main::after {
-  background: linear-gradient(180deg, transparent 24%, rgb(0 3 37 / 68%));
-  content: "";
-  inset: 0;
-  position: absolute;
-}
-
 .featured-main img,
 .featured-media img {
   display: block;
@@ -842,14 +834,6 @@ h3 {
   transform: scale(1.035);
 }
 
-.featured-main div {
-  align-self: end;
-  padding: 24px;
-  position: relative;
-  z-index: 1;
-}
-
-.featured-main span,
 .featured-text span {
   color: var(--yellow);
   display: block;
@@ -860,21 +844,10 @@ h3 {
   text-transform: none;
 }
 
-.featured-main h3 {
-  font-size: clamp(48px, 5.6vw, 82px);
-  line-height: 0.9;
-  margin: 0 0 8px;
-}
-
-.featured-main p,
 .featured-text p {
   color: rgb(0 3 37 / 66%);
   line-height: 1.48;
   margin: 0;
-}
-
-.featured-main p {
-  color: rgb(255 255 255 / 76%);
 }
 
 .featured-text {
@@ -1834,6 +1807,12 @@ a.mosaic-item {
   transform: scale(1.075);
 }
 
+@media (max-width: 1180px) {
+  .detail-gallery-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 .lightbox-close {
   align-items: center;
   background: white;
@@ -2669,8 +2648,18 @@ footer a:hover {
     grid-template-columns: 1fr;
   }
 
+  .home-hero {
+    justify-items: stretch;
+  }
+
+  .hero-copy,
+  .kinetic-board {
+    max-width: 100%;
+    width: 100%;
+  }
+
   .detail-gallery-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .kinetic-board {
@@ -2712,7 +2701,7 @@ footer a:hover {
 
   .featured-carousel {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: auto;
+    grid-template-rows: repeat(4, minmax(190px, auto));
     min-height: 0;
   }
 
@@ -2730,6 +2719,10 @@ footer a:hover {
   .featured-bottom-left-b {
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .featured-bottom-right {
+    display: none;
   }
 
   .featured-main,
@@ -2784,6 +2777,7 @@ footer a:hover {
 
   .featured-carousel {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
   }
 
   .featured-main,
@@ -2791,8 +2785,12 @@ footer a:hover {
     min-height: 240px;
   }
 
-  .featured-main h3 {
-    font-size: 38px;
+  .featured-assignment,
+  .featured-top-right,
+  .featured-bottom-left-a,
+  .featured-bottom-left-b,
+  .featured-bottom-right {
+    display: none;
   }
 
   h1 {
@@ -2805,7 +2803,11 @@ footer a:hover {
   }
 
   .kinetic-board {
-    min-height: 360px;
+    aspect-ratio: 0.92;
+    box-sizing: border-box;
+    justify-self: stretch;
+    min-height: 0;
+    width: 100%;
   }
 
   .kb-logo {
