@@ -385,6 +385,18 @@ h3 {
   transform: scale(1.025);
 }
 
+@media (max-width: 1240px) and (min-width: 981px) {
+  .home-hero {
+    gap: clamp(30px, 4vw, 56px);
+    grid-template-columns: minmax(0, 0.94fr) minmax(0, 1fr);
+  }
+
+  .kinetic-board {
+    min-height: 0;
+    width: 100%;
+  }
+}
+
 .kb,
 .kb-logo,
 .kb-chip {
