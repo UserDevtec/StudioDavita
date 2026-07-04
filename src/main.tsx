@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Link, Navigate, NavLink, Route, Routes, useLocation, useParams } from "react-router-dom";
-import { ArrowUpRight, Film, Menu, Play, X } from "lucide-react";
+import { ArrowUpRight, Camera, Film, Menu, Palette, Play, Share2, X } from "lucide-react";
 import "./styles.css";
 
 type WorkItem = {
@@ -13,6 +13,10 @@ type WorkItem = {
   slug?: string;
   detail?: string;
 };
+
+type PortfolioCategory = "graphic" | "photo" | "social";
+type VideoCategory = "verhaal" | "campagne" | "event";
+type VideoItem = [string, string, string, string, string, VideoCategory];
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
 
@@ -143,13 +147,19 @@ const gallery = [
   asset("work/work-22.png"),
 ];
 
-const videos = [
-  ["Stamceldonoren bedankt!", "01:11", "Een korte film over hoop, donoren en het verschil maken.", asset("videos/video-01.mp4"), asset("video-posters/video-01.jpg")],
-  ["Een bijzondere verjaardag voor Brian", "03:24", "Een persoonlijk verhaal rond een stamceldonor en een nieuwe toekomst.", asset("videos/video-02.mp4"), asset("video-posters/video-02.jpg")],
-  ["Jungheinrich, het eldorado voor servicemonteurs.", "01:57", "Werkgeversverhaal met tempo, waardering en een heldere boodschap.", asset("videos/video-03.mp4"), asset("video-posters/video-03.jpg")],
-  ["HVDZ Trakteer jezelf op Leiden", "00:31", "Campagne voor de binnenstad promotie van Leiden.", asset("videos/video-04.mp4"), asset("video-posters/video-04.jpg")],
-  ["One Young World 2018 | Unilever", "04:06", "Eventverhaal rond jonge leiders en positieve impact.", asset("videos/video-05.mp4"), asset("video-posters/video-05.jpg")],
-  ["Dit zijn wij | Geert", "01:00", "Een compact karakterverhaal voor Dirk Kuyt Foundation.", asset("videos/video-06.mp4"), asset("video-posters/video-06.jpg")],
+const videos: VideoItem[] = [
+  ["Stamceldonoren bedankt!", "01:11", "Een korte film over hoop, donoren en het verschil maken.", asset("videos/video-01.mp4"), asset("video-posters/video-01.jpg"), "verhaal"],
+  ["Een bijzondere verjaardag voor Brian", "03:24", "Een persoonlijk verhaal rond een stamceldonor en een nieuwe toekomst.", asset("videos/video-02.mp4"), asset("video-posters/video-02.jpg"), "verhaal"],
+  ["Jungheinrich, het eldorado voor servicemonteurs.", "01:57", "Werkgeversverhaal met tempo, waardering en een heldere boodschap.", asset("videos/video-03.mp4"), asset("video-posters/video-03.jpg"), "campagne"],
+  ["HVDZ Trakteer jezelf op Leiden", "00:31", "Campagne voor de binnenstad promotie van Leiden.", asset("videos/video-04.mp4"), asset("video-posters/video-04.jpg"), "campagne"],
+  ["One Young World 2018 | Unilever", "04:06", "Eventverhaal rond jonge leiders en positieve impact.", asset("videos/video-05.mp4"), asset("video-posters/video-05.jpg"), "event"],
+  ["Dit zijn wij | Geert", "01:00", "Een compact karakterverhaal voor Dirk Kuyt Foundation.", asset("videos/video-06.mp4"), asset("video-posters/video-06.jpg"), "verhaal"],
+];
+
+const videoFilters: Array<{ id: VideoCategory; label: string; description: string }> = [
+  { id: "verhaal", label: "Verhalen", description: "Menselijke films met ritme en gevoel" },
+  { id: "campagne", label: "Campagnes", description: "Korte merk- en social video's" },
+  { id: "event", label: "Events", description: "Sfeer, impact en verslaglegging" },
 ];
 
 const slugify = (value: string) =>
@@ -205,6 +215,30 @@ const rainProjects = [
 ];
 
 const portfolioProjects = rainProjects;
+const portfolioFilters: Array<{ id: PortfolioCategory; label: string; description: string }> = [
+  { id: "graphic", label: "Grafisch ontwerp", description: "Print, identiteit en campagne materiaal" },
+  { id: "photo", label: "Fotografie", description: "Portret, sfeer en beeldregie" },
+  { id: "social", label: "Sociale content", description: "Digitale middelen en mobile-first formats" },
+];
+
+const portfolioCategoryFor = (project: WorkItem): PortfolioCategory => {
+  if (project.slug === "photography") return "photo";
+  if (["social-content", "campaign-visuals", "brand-moments", "visual-set"].includes(project.slug ?? "")) return "social";
+  return "graphic";
+};
+
+function PortfolioCategoryIcon({ category }: { category: PortfolioCategory }) {
+  if (category === "photo") return <Camera size={20} />;
+  if (category === "social") return <Share2 size={20} />;
+  return <Palette size={20} />;
+}
+
+function VideoCategoryIcon({ category }: { category: VideoCategory }) {
+  if (category === "event") return <Camera size={20} />;
+  if (category === "campagne") return <Share2 size={20} />;
+  return <Film size={20} />;
+}
+
 const standoutProjects = [
   {
     project: portfolioProjects.find((item) => item.slug === "graphic-design")!,
@@ -247,6 +281,8 @@ const standoutProjects = [
   },
 ];
 
+const clientLogos = ["NOVA FRAME", "LUMA HOUSE", "CANAL EDITS", "FORMA STUDIO", "BRIGHT NORTH", "MOTION VALE"];
+
 const projectRain = rainProjects.map((project, index) => {
   const patterns = [
     ["1%", "0.92", "20s", "0s", "-3deg", "2deg"],
@@ -282,7 +318,7 @@ const skills = [
   ["After Effects", 73],
 ];
 
-function useReveal() {
+function useReveal(deps: React.DependencyList = []) {
   useEffect(() => {
     const targets = Array.from(document.querySelectorAll<HTMLElement>(".reveal, .word-fade span, .experience-card, .skill-card"));
     const observer = new IntersectionObserver(
@@ -295,7 +331,7 @@ function useReveal() {
     );
     targets.forEach((target) => observer.observe(target));
     return () => observer.disconnect();
-  }, []);
+  }, deps);
 }
 
 function Layout() {
@@ -332,7 +368,6 @@ function Layout() {
           <NavLink to="/portfolio">Portfolio</NavLink>
           <NavLink to="/video">Video</NavLink>
           <NavLink to="/experience">Ervaring</NavLink>
-          <NavLink to="/skills">Vaardigheden</NavLink>
           <NavLink to="/contact">Contact</NavLink>
         </nav>
       </header>
@@ -345,7 +380,7 @@ function Layout() {
         <Route path="/video" element={<Video />} />
         <Route path="/video/:slug" element={<VideoDetail />} />
         <Route path="/experience" element={<Experience />} />
-        <Route path="/skills" element={<Skills />} />
+        <Route path="/skills" element={<Navigate to="/experience" replace />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/logo-options" element={<LogoOptions />} />
       </Routes>
@@ -361,7 +396,6 @@ function getPageTitle(pathname: string) {
   if (cleanPath === "/portfolio" || cleanPath === "/work") return "Portfolio | StudioDavita";
   if (cleanPath === "/video") return "Video | StudioDavita";
   if (cleanPath === "/experience") return "Ervaring | StudioDavita";
-  if (cleanPath === "/skills") return "Vaardigheden | StudioDavita";
   if (cleanPath === "/contact") return "Contact | StudioDavita";
   if (cleanPath === "/logo-options") return "Logo-opties | StudioDavita";
 
@@ -527,14 +561,9 @@ function KineticChip() {
 }
 
 function FeaturedPortfolioCarousel() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const active = standoutProjects[activeIndex];
+  const active = standoutProjects[0];
   const project = active.project;
   const supportingImages = active.images;
-
-  const goTo = (direction: 1 | -1) => {
-    setActiveIndex((current) => (current + direction + standoutProjects.length) % standoutProjects.length);
-  };
 
   return (
     <div className="featured-carousel reveal">
@@ -581,10 +610,100 @@ function FeaturedPortfolioCarousel() {
       <div className="featured-media featured-bottom-right">
         <img src={supportingImages[3] ?? project.image} alt="" />
       </div>
-
-      <button className="featured-hotspot featured-prev" type="button" onClick={() => goTo(-1)} aria-label="Vorig uitgelicht project" />
-      <button className="featured-hotspot featured-next" type="button" onClick={() => goTo(1)} aria-label="Volgend uitgelicht project" />
     </div>
+  );
+}
+
+function ClientLogoMark({ name, index }: { name: string; index: number }) {
+  const variant = index % 6;
+
+  return (
+    <span className="client-wordmark" aria-label={name}>
+      <svg className={`client-logo-svg client-logo-svg-${variant}`} viewBox="0 0 220 92" aria-hidden="true">
+        <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+          {variant === 0 && (
+            <>
+              <path d="M18 46h46M42 18v56M78 23h30c17 0 28 9 28 23s-11 23-28 23H78z" strokeWidth="8" />
+              <path d="M152 25h36M152 46h50M152 67h36" strokeWidth="7" />
+            </>
+          )}
+          {variant === 1 && (
+            <>
+              <circle cx="43" cy="46" r="27" strokeWidth="8" />
+              <path d="M78 66c18-34 42-34 62 0M154 24h38M154 46h52M154 68h38" strokeWidth="7" />
+            </>
+          )}
+          {variant === 2 && (
+            <>
+              <path d="M20 69 50 22l30 47M32 52h36M104 24v44h50M174 24v44h28" strokeWidth="8" />
+            </>
+          )}
+          {variant === 3 && (
+            <>
+              <path d="M22 24h56v44H22zM94 24h32c16 0 26 9 26 22s-10 22-26 22H94z" strokeWidth="8" />
+              <path d="M172 24c18 0 27 44 40 44" strokeWidth="7" />
+            </>
+          )}
+          {variant === 4 && (
+            <>
+              <path d="M24 68V24h48c16 0 26 8 26 20s-10 20-26 20H24M122 24v44M146 24l44 44M190 24l-44 44" strokeWidth="8" />
+            </>
+          )}
+          {variant === 5 && (
+            <>
+              <path d="M22 46c22-28 44-28 66 0s44 28 66 0 34-28 48 0" strokeWidth="8" />
+              <path d="M26 69h176" strokeWidth="7" />
+            </>
+          )}
+        </g>
+      </svg>
+      <strong>{name}</strong>
+    </span>
+  );
+}
+
+function ClientLogoSlider() {
+  const logos = [...clientLogos, ...clientLogos];
+
+  return (
+    <section className="client-strip page-pad" aria-label="Merken en klanten">
+      <div className="client-strip-copy reveal">
+        <TypewriterEyebrow text="Klanten en merken" />
+        <h2>Werk voor merken en verhalen.</h2>
+      </div>
+      <div className="logo-marquee reveal">
+        <div className="logo-track">
+          {logos.map((logo, index) => (
+            <span className="client-logo" key={`${logo}-${index}`}>
+              <ClientLogoMark name={logo} index={index} />
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SkillSlider() {
+  const skillItems = [...skills, ...skills];
+
+  return (
+    <section className="client-strip skill-strip page-pad" aria-label="Vaardigheden">
+      <div className="client-strip-copy reveal">
+        <TypewriterEyebrow text="Vaardigheden" />
+        <h2>Een toolkit voor beweging, layout en visuele verhalen.</h2>
+      </div>
+      <div className="logo-marquee skill-marquee reveal">
+        <div className="logo-track">
+          {skillItems.map(([skill, level], index) => (
+            <span className="client-logo skill-logo" key={`${skill}-${index}`}>
+              <strong>{skill}</strong>
+              <small>{level}%</small>
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -595,7 +714,7 @@ function Home() {
       <section className="home-hero page-pad">
         <div className="hero-copy reveal">
           <TypewriterEyebrow text="Mijn naam is Davita." />
-          <h1>Video-editor & grafisch ontwerper.</h1>
+          <h1><span className="hero-title-rose">Video-editor</span> & grafisch <span className="hero-title-yellow">ontwerper.</span></h1>
           <p className="intro">
             StudioDavita is het portfolio van Davita: creatief ontwerp, videomontage, bewegend ontwerp
             en visuele verhalen voor merken, campagnes en sociale content.
@@ -630,9 +749,24 @@ function Home() {
       <section className="home-random page-pad">
         <div className="section-heading reveal">
           <TypewriterEyebrow text="Portfolio" />
-          <h2>Drie projecten die uitblinken in beeld, ritme en verhaal.</h2>
+          <h2>Beeld, ritme en verhaal.</h2>
         </div>
         <FeaturedPortfolioCarousel />
+      </section>
+
+      <ClientLogoSlider />
+
+      <section className="home-jump page-pad">
+        <Link to="/portfolio" className="jump-card reveal">
+          <span>Grafisch ontwerp / fotografie</span>
+          <strong>Bekijk het visuele archief</strong>
+          <ArrowUpRight />
+        </Link>
+        <Link to="/video" className="jump-card reveal">
+          <span>Videografie</span>
+          <strong>Bekijk de videolijst</strong>
+          <Film />
+        </Link>
       </section>
 
       <section className="portfolio-modes page-pad">
@@ -652,48 +786,46 @@ function Home() {
           <p>Videocontent die helderheid, emotie en tempo geeft aan campagnes en social kanalen.</p>
         </div>
       </section>
-
-      <section className="home-jump page-pad">
-        <Link to="/portfolio" className="jump-card reveal">
-          <span>Grafisch ontwerp / fotografie</span>
-          <strong>Bekijk het visuele archief</strong>
-          <ArrowUpRight />
-        </Link>
-        <Link to="/video" className="jump-card reveal">
-          <span>Videografie</span>
-          <strong>Bekijk de videolijst</strong>
-          <Film />
-        </Link>
-      </section>
     </main>
   );
 }
 
 function Portfolio() {
-  useReveal();
+  const [activeFilter, setActiveFilter] = useState<PortfolioCategory>("graphic");
+  const filteredProjects = portfolioProjects.filter((project) => portfolioCategoryFor(project) === activeFilter);
+  useReveal([activeFilter]);
+
   return (
     <main>
       <PageIntro eyebrow="Portfolio" title="Mijn nieuwste werk." text="Een bewust gemengde collectie grafisch ontwerp, fotografie, merk ontwikkeling, print en sociale content uit het huidige StudioDavita portfolio." />
       <section className="case-section page-pad">
-        <div className="case-grid">
-          {graphicWork.map((item, index) => (
-            <Link className="case-card reveal" to={`/portfolio/${item.slug}`} key={item.title}>
-              <div className="case-art">
-                <img src={item.image} alt={`${item.title} portfolio-item`} />
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{item.title}</strong>
-              </div>
-              <div className="case-meta">
-                <p>{item.type}</p>
-                <h3>{item.title}</h3>
-                <span>{item.note}</span>
-              </div>
-            </Link>
-          ))}
+        <div className="portfolio-filter-panel reveal" aria-label="Portfolio filter">
+          {portfolioFilters.map((filter) => {
+            const isActive = activeFilter === filter.id;
+
+            return (
+              <button
+                className={`portfolio-filter-button${isActive ? " is-active" : ""}`}
+                type="button"
+                onClick={() => setActiveFilter(filter.id)}
+                aria-pressed={isActive}
+                key={filter.id}
+              >
+                <span className="portfolio-filter-icon">
+                  <PortfolioCategoryIcon category={filter.id} />
+                </span>
+                <span>
+                  <strong>{filter.label}</strong>
+                  <small>{filter.description}</small>
+                </span>
+              </button>
+            );
+          })}
         </div>
-        <div className="mosaic">
-          {portfolioProjects.map((project, index) => (
-            <Link className={`mosaic-item m-${(index % 5) + 1} reveal`} to={`/portfolio/${project.slug}`} key={project.slug}>
+
+        <div className="portfolio-board">
+          {filteredProjects.map((project, index) => (
+            <Link className={`portfolio-board-item board-${(index % 6) + 1} reveal`} to={`/portfolio/${project.slug}`} key={project.slug}>
               <img src={project.image} alt={`${project.title} portfolio-item`} />
             </Link>
           ))}
@@ -704,13 +836,42 @@ function Portfolio() {
 }
 
 function Video() {
-  useReveal();
+  const [activeFilter, setActiveFilter] = useState<VideoCategory>("verhaal");
+  const filteredVideos = videos.filter(([, , , , , category]) => category === activeFilter);
+  useReveal([activeFilter]);
+
   return (
     <main>
       <PageIntro eyebrow="Videografie" title="Verhalen met tempo, helderheid en gevoel." text="Geselecteerd videomontage- en vertelwerk uit het bestaande StudioDavita portfolio." />
+      <section className="video-filter-section page-pad">
+        <div className="portfolio-filter-panel video-filter-panel reveal" aria-label="Videofilter">
+          {videoFilters.map((filter) => {
+            const isActive = activeFilter === filter.id;
+
+            return (
+              <button
+                className={`portfolio-filter-button${isActive ? " is-active" : ""}`}
+                type="button"
+                onClick={() => setActiveFilter(filter.id)}
+                aria-pressed={isActive}
+                key={filter.id}
+              >
+                <span className="portfolio-filter-icon">
+                  <VideoCategoryIcon category={filter.id} />
+                </span>
+                <span>
+                  <strong>{filter.label}</strong>
+                  <small>{filter.description}</small>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
       <section className="video-section page-pad">
         <div className="video-grid">
-          {videos.map(([title, duration, note, src, poster], index) => (
+          {filteredVideos.map(([title, duration, note, src, poster], index) => (
             <Link className="video-card reveal" to={`/video/${slugify(title)}`} key={title}>
               <div
                 className="video-preview"
@@ -972,35 +1133,7 @@ function Experience() {
           ))}
         </div>
       </section>
-    </main>
-  );
-}
-
-function Skills() {
-  useReveal();
-  return (
-    <main>
-      <PageIntro eyebrow="Vaardigheden" title="Een toolkit voor beweging, layout en visuele verhalen." text="Software en vakgebieden die Davita inzet voor montage, ontwerp, beweging en campagnecontent." />
-      <section className="skills-section skills-showcase page-pad">
-        <div className="skill-copy">
-          <TypewriterEyebrow text="Creatieve toolkit" />
-          <h2>Van ruwe montage naar een uitgewerkt campagne systeem.</h2>
-          <p>Video, print en digitale middelen worden behandeld als een workflow: eerst structuur, daarna ritme, beeld, typografie en beweging.</p>
-        </div>
-        <div className="skill-stack">
-          {skills.map(([skill, level], index) => (
-            <article
-              className={`skill-card skill-card-${index + 1}`}
-              style={{ "--skill-delay": `${index * 95}ms` } as React.CSSProperties}
-              key={skill}
-            >
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <strong>{skill}</strong>
-              <i>{level}%</i>
-            </article>
-          ))}
-        </div>
-      </section>
+      <SkillSlider />
     </main>
   );
 }
