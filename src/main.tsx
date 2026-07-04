@@ -24,7 +24,7 @@ const graphicWork: WorkItem[] = [
   {
     title: "Grafisch ontwerp",
     type: "Print & campagne",
-    slug: "graphic-design",
+    slug: "grafisch-ontwerp",
     image: asset("work/work-05.png"),
     note: "Brochures, magazines, campagnebeelden en merkgerichte materialen.",
     gallery: [
@@ -39,7 +39,7 @@ const graphicWork: WorkItem[] = [
   {
     title: "Fotografie",
     type: "Beeldregie",
-    slug: "photography",
+    slug: "fotografie",
     image: asset("work/work-11.jpg"),
     note: "Portretten en visuele verhalen met een heldere redactionele toon.",
     detail: "Fotografisch werk dat is ontwikkeld voor campagnecontext: portretten, sfeer, compositie en beeldregie die een groter visueel verhaal ondersteunen.",
@@ -47,7 +47,7 @@ const graphicWork: WorkItem[] = [
   {
     title: "Sociale content",
     type: "Digitale middelen",
-    slug: "social-content",
+    slug: "sociale-content",
     image: asset("work/work-22.png"),
     note: "Social beelden, mobile-first formats en campagnesets.",
     gallery: [
@@ -66,7 +66,7 @@ const featuredProjects: WorkItem[] = [
   {
     title: "Redactionele layout",
     type: "Publicatieontwerp",
-    slug: "editorial-layout",
+    slug: "redactionele-layout",
     image: asset("work/work-01.png"),
     note: "Magazine-achtige layouts met een heldere, zelfverzekerde structuur.",
     detail: "Redactionele pagina's en printmiddelen met sterke witruimte, beeldschaal en typografisch contrast.",
@@ -74,7 +74,7 @@ const featuredProjects: WorkItem[] = [
   {
     title: "Campagnebeelden",
     type: "Merkcampagne",
-    slug: "campaign-visuals",
+    slug: "campagnebeelden",
     image: asset("work/work-12.png"),
     note: "Campagne materiaal waarin typografie, beeld en energie samenkomen.",
     gallery: [
@@ -90,7 +90,7 @@ const featuredProjects: WorkItem[] = [
   {
     title: "Posterserie",
     type: "Grafisch systeem",
-    slug: "poster-series",
+    slug: "posterserie",
     image: asset("work/work-06.png"),
     note: "Een uitgesproken posterrichting met expressieve compositie.",
     gallery: [
@@ -103,7 +103,7 @@ const featuredProjects: WorkItem[] = [
   {
     title: "Muziekbeeld",
     type: "Visuele identiteit",
-    slug: "music-artwork",
+    slug: "muziekbeeld",
     image: asset("work/work-19.png"),
     note: "Covers en visuele middelen met een filmische sfeer.",
     gallery: [
@@ -119,7 +119,7 @@ const featuredProjects: WorkItem[] = [
   {
     title: "Merksignalen",
     type: "Social & print",
-    slug: "brand-moments",
+    slug: "merksignalen",
     image: asset("work/work-20.png"),
     note: "Kleine maar herkenbare merkuitingen in verschillende formats.",
     gallery: [
@@ -175,7 +175,7 @@ const rainProjects = [
   {
     title: "Portfoliodetail",
     type: "Campagnedetail",
-    slug: "portfolio-detail",
+    slug: "portfoliodetail",
     image: asset("work/work-02.png"),
     note: "Gedetailleerd visueel werk uit het archief.",
     gallery: [
@@ -188,7 +188,7 @@ const rainProjects = [
   {
     title: "Printverhaal",
     type: "Printontwerp",
-    slug: "printed-story",
+    slug: "printverhaal",
     image: asset("work/work-03.png"),
     note: "Gedrukt campagne materiaal met een helder ritme.",
     gallery: [
@@ -201,7 +201,7 @@ const rainProjects = [
   {
     title: "Visuele set",
     type: "Gemengde media",
-    slug: "visual-set",
+    slug: "visuele-set",
     image: asset("work/work-13.png"),
     note: "Een gemengde set ontworpen momenten.",
     gallery: [
@@ -215,6 +215,30 @@ const rainProjects = [
 ];
 
 const portfolioProjects = rainProjects;
+const portfolioSlugAliases: Record<string, string> = {
+  "graphic-design": "grafisch-ontwerp",
+  photography: "fotografie",
+  "social-content": "sociale-content",
+  "editorial-layout": "redactionele-layout",
+  "campaign-visuals": "campagnebeelden",
+  "poster-series": "posterserie",
+  "music-artwork": "muziekbeeld",
+  "brand-moments": "merksignalen",
+  "portfolio-detail": "portfoliodetail",
+  "printed-story": "printverhaal",
+  "visual-set": "visuele-set",
+};
+
+const resolvePortfolioSlug = (slug?: string) => {
+  if (!slug) return "";
+  return portfolioSlugAliases[slug] ?? slug;
+};
+
+const findPortfolioProject = (slug?: string) => {
+  const resolvedSlug = resolvePortfolioSlug(slug);
+  return portfolioProjects.find((item) => item.slug === resolvedSlug);
+};
+
 const portfolioFilters: Array<{ id: PortfolioCategory; label: string; description: string }> = [
   { id: "graphic", label: "Grafisch ontwerp", description: "Print, identiteit en campagne materiaal" },
   { id: "photo", label: "Fotografie", description: "Portret, sfeer en beeldregie" },
@@ -222,8 +246,8 @@ const portfolioFilters: Array<{ id: PortfolioCategory; label: string; descriptio
 ];
 
 const portfolioCategoryFor = (project: WorkItem): PortfolioCategory => {
-  if (project.slug === "photography") return "photo";
-  if (["social-content", "campaign-visuals", "brand-moments", "visual-set"].includes(project.slug ?? "")) return "social";
+  if (project.slug === "fotografie") return "photo";
+  if (["sociale-content", "campagnebeelden", "merksignalen", "visuele-set"].includes(project.slug ?? "")) return "social";
   return "graphic";
 };
 
@@ -241,7 +265,7 @@ function VideoCategoryIcon({ category }: { category: VideoCategory }) {
 
 const standoutProjects = [
   {
-    project: portfolioProjects.find((item) => item.slug === "graphic-design")!,
+    project: portfolioProjects.find((item) => item.slug === "grafisch-ontwerp")!,
     eyebrow: "Uitgelicht project",
     images: [
       asset("work/work-16.png"),
@@ -254,7 +278,7 @@ const standoutProjects = [
     assignment: "Een visuele set met kaartmateriaal, campagnebeelden en printitems voor een herkenbare ervaring.",
   },
   {
-    project: portfolioProjects.find((item) => item.slug === "music-artwork")!,
+    project: portfolioProjects.find((item) => item.slug === "muziekbeeld")!,
     eyebrow: "Beeldwereld",
     images: [
       asset("work/work-06.png"),
@@ -267,7 +291,7 @@ const standoutProjects = [
     assignment: "Artwork en visuele middelen vertalen naar een complete, consistente presentatie.",
   },
   {
-    project: portfolioProjects.find((item) => item.slug === "campaign-visuals")!,
+    project: portfolioProjects.find((item) => item.slug === "campagnebeelden")!,
     eyebrow: "Print & campagne",
     images: [
       asset("work/work-12.png"),
@@ -367,7 +391,7 @@ function Layout() {
           <NavLink to="/">Start</NavLink>
           <NavLink to="/portfolio">Portfolio</NavLink>
           <NavLink to="/video">Video</NavLink>
-          <NavLink to="/experience">Ervaring</NavLink>
+          <NavLink to="/ervaring">Ervaring</NavLink>
           <NavLink to="/contact">Contact</NavLink>
         </nav>
       </header>
@@ -379,10 +403,12 @@ function Layout() {
         <Route path="/work/:slug" element={<LegacyPortfolioRedirect />} />
         <Route path="/video" element={<Video />} />
         <Route path="/video/:slug" element={<VideoDetail />} />
-        <Route path="/experience" element={<Experience />} />
-        <Route path="/skills" element={<Navigate to="/experience" replace />} />
+        <Route path="/ervaring" element={<Experience />} />
+        <Route path="/experience" element={<Navigate to="/ervaring" replace />} />
+        <Route path="/skills" element={<Navigate to="/ervaring" replace />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/logo-options" element={<LogoOptions />} />
+        <Route path="/logo-opties" element={<LogoOptions />} />
+        <Route path="/logo-options" element={<Navigate to="/logo-opties" replace />} />
       </Routes>
       <Footer />
     </>
@@ -395,13 +421,13 @@ function getPageTitle(pathname: string) {
   if (cleanPath === "/") return "Start | StudioDavita";
   if (cleanPath === "/portfolio" || cleanPath === "/work") return "Portfolio | StudioDavita";
   if (cleanPath === "/video") return "Video | StudioDavita";
-  if (cleanPath === "/experience") return "Ervaring | StudioDavita";
+  if (cleanPath === "/ervaring" || cleanPath === "/experience") return "Ervaring | StudioDavita";
   if (cleanPath === "/contact") return "Contact | StudioDavita";
-  if (cleanPath === "/logo-options") return "Logo-opties | StudioDavita";
+  if (cleanPath === "/logo-opties" || cleanPath === "/logo-options") return "Logo-opties | StudioDavita";
 
   const portfolioMatch = cleanPath.match(/^\/(?:portfolio|work)\/(.+)$/);
   if (portfolioMatch) {
-    const project = portfolioProjects.find((item) => item.slug === portfolioMatch[1]);
+    const project = findPortfolioProject(portfolioMatch[1]);
     return `${project?.title ?? "Project"} | StudioDavita`;
   }
 
@@ -440,7 +466,7 @@ function ScrollToTop() {
 
 function LegacyPortfolioRedirect() {
   const { slug } = useParams();
-  return <Navigate to={`/portfolio/${slug ?? ""}`} replace />;
+  return <Navigate to={`/portfolio/${resolvePortfolioSlug(slug)}`} replace />;
 }
 
 function TypewriterEyebrow({ text }: { text: string }) {
@@ -657,7 +683,6 @@ function ClientLogoMark({ name, index }: { name: string; index: number }) {
           )}
         </g>
       </svg>
-      <strong>{name}</strong>
     </span>
   );
 }
@@ -691,7 +716,7 @@ function SkillSlider() {
     <section className="client-strip skill-strip page-pad" aria-label="Vaardigheden">
       <div className="client-strip-copy reveal">
         <TypewriterEyebrow text="Vaardigheden" />
-        <h2>Een toolkit voor beweging, layout en visuele verhalen.</h2>
+        <h2>Tools voor beeld en beweging.</h2>
       </div>
       <div className="logo-marquee skill-marquee reveal">
         <div className="logo-track">
@@ -913,7 +938,8 @@ function Video() {
 
 function PortfolioDetail() {
   const { slug } = useParams();
-  const project = portfolioProjects.find((item) => item.slug === slug);
+  const resolvedSlug = resolvePortfolioSlug(slug);
+  const project = findPortfolioProject(slug);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   useReveal();
@@ -934,6 +960,10 @@ function PortfolioDetail() {
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [lightboxImage]);
+
+  if (slug && resolvedSlug !== slug) {
+    return <Navigate to={`/portfolio/${resolvedSlug}`} replace />;
+  }
 
   if (!project) {
     return (
@@ -966,7 +996,7 @@ function PortfolioDetail() {
               <div className="detail-gallery-grid">
                 {galleryImages.map((image, index) => (
                   <button
-                    className={`gallery-tile gallery-tile-${(index % 9) + 1}${activePreview === image ? " is-active" : ""}`}
+                    className={`gallery-tile${activePreview === image ? " is-active" : ""}`}
                     type="button"
                     key={image}
                     onClick={() => setLightboxImage(image)}
