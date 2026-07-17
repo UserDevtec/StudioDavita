@@ -79,7 +79,7 @@ main {
   display: block;
   font-family: "Space Grotesk", sans-serif;
   position: relative;
-  width: 78px;
+  width: clamp(190px, 18vw, 280px);
   z-index: 32;
 }
 

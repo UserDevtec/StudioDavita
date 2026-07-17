@@ -375,7 +375,7 @@ function Layout() {
       <ScrollToTop />
       <header className="site-header">
         <Link className="brand" to="/" aria-label="StudioDavita startpagina">
-          <img src={asset("logo-lg-line.svg")} alt="StudioDavita" />
+          <img src={asset("StudioDavita_logo-iconen-05.svg")} alt="StudioDavita" />
         </Link>
         <button
           className={`menu-toggle${menuOpen ? " is-open" : ""}`}
